@@ -14,6 +14,7 @@ type CreateTaskInput struct {
 
 type TodoRepository interface {
 	AllTasks() []*domain.Task
+	CreateTask(name string) *domain.Task
 }
 
 type TodoUseCase struct {
@@ -40,5 +41,11 @@ func (uc *TodoUseCase) ListTasks() (output []TaskOutput) {
 }
 
 func (uc *TodoUseCase) CreateTask(input *CreateTaskInput) *TaskOutput {
-	return &TaskOutput{1, input.Name, 0}
+	task := uc.repo.CreateTask(input.Name)
+
+	return &TaskOutput{
+		ID:     task.ID,
+		Name:   task.Name,
+		Status: task.StatusCode(),
+	}
 }
