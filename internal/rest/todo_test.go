@@ -6,20 +6,27 @@ import (
 	"testing"
 
 	"github.com/elct9620/interview-gogolook-todo/internal/rest"
+	"github.com/elct9620/interview-gogolook-todo/internal/todo"
+	"github.com/elct9620/interview-gogolook-todo/internal/todo/repo"
 	"github.com/gin-gonic/gin"
 	"github.com/google/go-cmp/cmp"
 )
 
 type TodoTestSuite struct {
 	engine *gin.Engine
+	repo   todo.TodoRepository
 }
 
 func NewTodoTestSuite(t *testing.T) *TodoTestSuite {
+	repo := repo.NewMemoryStore()
+	usecase := todo.NewTodoUseCase(repo)
+
 	engine := gin.Default()
-	rest.AddTodoRoutes(engine)
+	rest.AddTodoRoutes(engine, usecase)
 
 	return &TodoTestSuite{
 		engine: engine,
+		repo:   repo,
 	}
 }
 
