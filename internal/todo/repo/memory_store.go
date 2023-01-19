@@ -46,6 +46,20 @@ func (s *MemoryStore) CreateTask(name string) *domain.Task {
 	return newTaskFromSchema(s.items[nextID])
 }
 
+func (s *MemoryStore) FindTask(id int) *domain.Task {
+	return newTaskFromSchema(s.items[id])
+}
+
+func (s *MemoryStore) UpdateTask(task *domain.Task) *domain.Task {
+	s.items[task.ID] = TaskSchema{
+		ID:        task.ID,
+		Name:      task.Name,
+		Completed: task.Completed,
+	}
+
+	return newTaskFromSchema(s.items[task.ID])
+}
+
 func newTaskFromSchema(schema TaskSchema) *domain.Task {
 	return domain.NewTask(schema.ID, schema.Name, schema.Completed)
 }

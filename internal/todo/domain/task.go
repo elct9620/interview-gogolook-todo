@@ -26,3 +26,15 @@ func (t *Task) StatusCode() int {
 
 	return TaskIncomplete
 }
+
+func (t *Task) Rename(newName string) {
+	t.Name = newName
+}
+
+func (t *Task) MarkComplete() {
+	t.Completed = true
+}
+
+func (t *Task) MarkIncomplete() {
+	t.Completed = false
+}

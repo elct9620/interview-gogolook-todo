@@ -2,6 +2,7 @@ package todo
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,8 +31,11 @@ func UpdateTask(usecase *TodoUseCase) gin.HandlerFunc {
 		var input UpdateTaskInput
 		c.ShouldBind(&input)
 
+		idStr := c.Param("id")
+		id, _ := strconv.Atoi(idStr)
+
 		c.JSON(http.StatusOK, gin.H{
-			"result": usecase.UpdateTask(&input),
+			"result": usecase.UpdateTask(id, &input),
 		})
 	}
 }

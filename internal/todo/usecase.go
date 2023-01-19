@@ -21,6 +21,8 @@ type UpdateTaskInput struct {
 type TodoRepository interface {
 	AllTasks() []*domain.Task
 	CreateTask(name string) *domain.Task
+	FindTask(id int) *domain.Task
+	UpdateTask(task *domain.Task) *domain.Task
 }
 
 type TodoUseCase struct {
@@ -56,10 +58,22 @@ func (uc *TodoUseCase) CreateTask(input *CreateTaskInput) *TaskOutput {
 	}
 }
 
-func (uc *TodoUseCase) UpdateTask(input *UpdateTaskInput) *TaskOutput {
+func (uc *TodoUseCase) UpdateTask(id int, input *UpdateTaskInput) *TaskOutput {
+	task := uc.repo.FindTask(id)
+	task.Rename(input.Name)
+
+	if input.Status == domain.TaskComplete {
+		task.MarkComplete()
+	}
+
+	if input.Status == domain.TaskIncomplete {
+		task.MarkIncomplete()
+	}
+
+	updatedTask := uc.repo.UpdateTask(task)
 	return &TaskOutput{
-		ID:     1,
-		Name:   "買早餐",
-		Status: 1,
+		ID:     updatedTask.ID,
+		Name:   updatedTask.Name,
+		Status: updatedTask.StatusCode(),
 	}
 }
