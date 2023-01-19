@@ -15,3 +15,9 @@ func ListTasks(c *gin.Context) {
 		"result": usecase.ListTasks(),
 	})
 }
+
+func CreateTask(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"result": gin.H{"id": 1, "name": "買晚餐", "status": 0},
+	})
+}

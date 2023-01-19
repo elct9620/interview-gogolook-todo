@@ -7,4 +7,5 @@ import (
 
 func AddTodoRoutes(router gin.IRouter) {
 	router.GET("/tasks", todo.ListTasks)
+	router.POST("/tasks", todo.CreateTask)
 }

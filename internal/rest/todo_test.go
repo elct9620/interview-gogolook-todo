@@ -38,3 +38,19 @@ func Test_GetTasks(t *testing.T) {
 		t.Error(cmp.Diff(`{"result":[{"id":1,"name":"name","status":0}]}`, res.Body.String()))
 	}
 }
+
+func Test_CreateTask(t *testing.T) {
+	suite := NewTodoTestSuite(t)
+
+	res := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/tasks", nil)
+	suite.engine.ServeHTTP(res, req)
+
+	if !cmp.Equal(http.StatusOK, res.Code) {
+		t.Error(cmp.Diff(http.StatusOK, res.Code))
+	}
+
+	if !cmp.Equal(`{"result":{"id":1,"name":"買晚餐","status":0}}`, res.Body.String()) {
+		t.Error(cmp.Diff(`{"result":{"id":1,"name":"買晚餐","status":0}}`, res.Body.String()))
+	}
+}
