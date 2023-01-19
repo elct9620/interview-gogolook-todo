@@ -34,9 +34,13 @@ func NewTodoTestSuite(t *testing.T) *TodoTestSuite {
 
 func Test_GetTasks(t *testing.T) {
 	tests := []struct {
+		tasks    []string
 		expected string
 	}{
-		{expected: `{"result":[{"id":1,"name":"name","status":0}]}`},
+		{
+			tasks:    []string{"name"},
+			expected: `{"result":[{"id":1,"name":"name","status":0}]}`,
+		},
 	}
 
 	for _, tc := range tests {
@@ -46,6 +50,10 @@ func Test_GetTasks(t *testing.T) {
 			tt.Parallel()
 
 			suite := NewTodoTestSuite(t)
+
+			for _, task := range tc.tasks {
+				suite.repo.CreateTask(task)
+			}
 
 			res := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodGet, "/tasks", nil)

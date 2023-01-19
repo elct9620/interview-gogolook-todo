@@ -26,9 +26,13 @@ func (s *MemoryStore) NextID() int {
 }
 
 func (s *MemoryStore) AllTasks() []*domain.Task {
-	return []*domain.Task{
-		domain.NewTask(1, "name", false),
+	tasks := []*domain.Task{}
+
+	for _, item := range s.items {
+		tasks = append(tasks, newTaskFromSchema(item))
 	}
+
+	return tasks
 }
 
 func (s *MemoryStore) CreateTask(name string) *domain.Task {
