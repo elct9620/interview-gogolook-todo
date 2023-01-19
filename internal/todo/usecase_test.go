@@ -42,6 +42,15 @@ func Test_UseCase_UpdateTask(t *testing.T) {
 	if !cmp.Equal("買午餐", task.Name) {
 		t.Error(cmp.Diff("買午餐", task.Name))
 	}
+
+	task = usecase.UpdateTask(2, &todo.UpdateTaskInput{1, "買早餐", 0})
+	if !cmp.Equal("買早餐", task.Name) {
+		t.Error(cmp.Diff("買早餐", task.Name))
+	}
+
+	if !cmp.Equal(2, task.ID) {
+		t.Error(cmp.Diff(2, task.ID))
+	}
 }
 
 func Test_UseCase_DeleteTask(t *testing.T) {

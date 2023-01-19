@@ -32,6 +32,11 @@ func Test_MemoryStore_FindTask(t *testing.T) {
 	if !cmp.Equal("買早餐", task.Name) {
 		t.Error(cmp.Diff("買早餐", task.Name))
 	}
+
+	task = store.FindTask(3)
+	if task != nil {
+		t.Fail()
+	}
 }
 
 func Test_MemoryStore_UpdateTask(t *testing.T) {
