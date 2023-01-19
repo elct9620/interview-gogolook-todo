@@ -1,5 +1,7 @@
 package todo
 
+import "github.com/elct9620/interview-gogolook-todo/internal/todo/domain"
+
 type TodoUseCase struct {
 }
 
@@ -8,7 +10,9 @@ func NewTodoUseCase() *TodoUseCase {
 }
 
 func (uc *TodoUseCase) ListTasks() []map[string]any {
+	task := domain.NewTask(1, "name", domain.TaskIncomplete)
+
 	return []map[string]any{
-		{"id": 1, "name": "name", "status": 0},
+		{"id": task.ID, "name": task.Name, "status": task.Status},
 	}
 }
