@@ -2,7 +2,11 @@ package todo
 
 import "github.com/elct9620/interview-gogolook-todo/internal/todo/domain"
 
-type TaskOutput map[string]any
+type TaskOutput struct {
+	ID     int    `json:"id"`
+	Name   string `json:"name"`
+	Status int    `json:"status"`
+}
 
 type TodoRepository interface {
 	AllTasks() []*domain.Task
@@ -22,9 +26,9 @@ func (uc *TodoUseCase) ListTasks() (output []TaskOutput) {
 	tasks := uc.repo.AllTasks()
 	for idx := range tasks {
 		output = append(output, TaskOutput{
-			"id":     tasks[idx].ID,
-			"name":   tasks[idx].Name,
-			"status": tasks[idx].StatusCode(),
+			ID:     tasks[idx].ID,
+			Name:   tasks[idx].Name,
+			Status: tasks[idx].StatusCode(),
 		})
 	}
 
@@ -32,5 +36,5 @@ func (uc *TodoUseCase) ListTasks() (output []TaskOutput) {
 }
 
 func (uc *TodoUseCase) CreateTask(name string) TaskOutput {
-	return TaskOutput{"id": 1, "name": name, "status": 0}
+	return TaskOutput{1, name, 0}
 }
