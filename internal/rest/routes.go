@@ -8,4 +8,5 @@ import (
 func AddTodoRoutes(router gin.IRouter, usecase *todo.TodoUseCase) {
 	router.GET("/tasks", todo.ListTasks(usecase))
 	router.POST("/tasks", todo.CreateTask(usecase))
+	router.PUT("/tasks/:id", todo.UpdateTask(usecase))
 }

@@ -12,6 +12,12 @@ type CreateTaskInput struct {
 	Name string `json:"name"`
 }
 
+type UpdateTaskInput struct {
+	ID     int    `json:"id"`
+	Name   string `json:"name"`
+	Status int    `json:"status"`
+}
+
 type TodoRepository interface {
 	AllTasks() []*domain.Task
 	CreateTask(name string) *domain.Task
@@ -47,5 +53,13 @@ func (uc *TodoUseCase) CreateTask(input *CreateTaskInput) *TaskOutput {
 		ID:     task.ID,
 		Name:   task.Name,
 		Status: task.StatusCode(),
+	}
+}
+
+func (uc *TodoUseCase) UpdateTask(input *UpdateTaskInput) *TaskOutput {
+	return &TaskOutput{
+		ID:     1,
+		Name:   "買早餐",
+		Status: 1,
 	}
 }

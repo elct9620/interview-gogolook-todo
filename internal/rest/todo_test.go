@@ -104,3 +104,49 @@ func Test_CreateTask(t *testing.T) {
 		})
 	}
 }
+
+func Test_UpdateTask(t *testing.T) {
+	tests := []struct {
+		tasks []string
+		input struct {
+			id   int
+			body string
+		}
+		expected string
+	}{
+		{
+			tasks: []string{"買晚餐"},
+			input: struct {
+				id   int
+				body string
+			}{1, `{"id": 1, "name":"買早餐", "status": 1}`},
+			expected: `{"result":{"id":1,"name":"買早餐","status":1}}`,
+		},
+	}
+
+	for _, tc := range tests {
+		tc := tc
+
+		t.Run(fmt.Sprintf("test %s", tc.input.body), func(tt *testing.T) {
+			tt.Parallel()
+
+			suite := NewTodoTestSuite(t)
+			for _, task := range tc.tasks {
+				suite.repo.CreateTask(task)
+			}
+
+			res := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodPut, fmt.Sprintf("/tasks/%d", tc.input.id), bytes.NewBufferString(tc.input.body))
+			req.Header.Add("Content-Type", "application/json")
+			suite.engine.ServeHTTP(res, req)
+
+			if !cmp.Equal(http.StatusOK, res.Code) {
+				tt.Error(cmp.Diff(http.StatusOK, res.Code))
+			}
+
+			if !cmp.Equal(tc.expected, res.Body.String()) {
+				tt.Error(cmp.Diff(tc.expected, res.Body.String()))
+			}
+		})
+	}
+}

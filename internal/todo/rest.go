@@ -24,3 +24,14 @@ func CreateTask(usecase *TodoUseCase) gin.HandlerFunc {
 		})
 	}
 }
+
+func UpdateTask(usecase *TodoUseCase) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var input UpdateTaskInput
+		c.ShouldBind(&input)
+
+		c.JSON(http.StatusOK, gin.H{
+			"result": usecase.UpdateTask(&input),
+		})
+	}
+}
