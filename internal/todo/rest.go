@@ -7,9 +7,9 @@ import (
 )
 
 func ListTasks(c *gin.Context) {
+	usecase := NewTodoUseCase()
+
 	c.JSON(http.StatusOK, gin.H{
-		"result": []gin.H{
-			{"id": 1, "name": "name", "status": 0},
-		},
+		"result": usecase.ListTasks(),
 	})
 }
