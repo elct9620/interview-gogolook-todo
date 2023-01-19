@@ -47,7 +47,12 @@ func (s *MemoryStore) CreateTask(name string) *domain.Task {
 }
 
 func (s *MemoryStore) FindTask(id int) *domain.Task {
-	return newTaskFromSchema(s.items[id])
+	item, ok := s.items[id]
+	if ok {
+		return newTaskFromSchema(item)
+	}
+
+	return nil
 }
 
 func (s *MemoryStore) UpdateTask(task *domain.Task) *domain.Task {

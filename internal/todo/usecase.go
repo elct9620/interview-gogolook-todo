@@ -61,6 +61,10 @@ func (uc *TodoUseCase) CreateTask(input *CreateTaskInput) *TaskOutput {
 
 func (uc *TodoUseCase) UpdateTask(id int, input *UpdateTaskInput) *TaskOutput {
 	task := uc.repo.FindTask(id)
+	if task == nil {
+		task = uc.repo.CreateTask(input.Name)
+	}
+
 	task.Rename(input.Name)
 
 	if input.Status == domain.TaskComplete {
