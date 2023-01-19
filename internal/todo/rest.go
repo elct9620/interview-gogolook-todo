@@ -39,3 +39,9 @@ func UpdateTask(usecase *TodoUseCase) gin.HandlerFunc {
 		})
 	}
 }
+
+func DeleteTask(usecase *TodoUseCase) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.JSON(http.StatusOK, nil)
+	}
+}

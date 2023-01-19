@@ -150,3 +150,37 @@ func Test_UpdateTask(t *testing.T) {
 		})
 	}
 }
+
+func Test_DeleteTask(t *testing.T) {
+	tests := []struct {
+		tasks []string
+		id    int
+	}{
+		{
+			tasks: []string{"買晚餐"},
+			id:    1,
+		},
+	}
+
+	for _, tc := range tests {
+		tc := tc
+
+		t.Run(fmt.Sprintf("test %d", tc.id), func(tt *testing.T) {
+			tt.Parallel()
+
+			suite := NewTodoTestSuite(t)
+			for _, task := range tc.tasks {
+				suite.repo.CreateTask(task)
+			}
+
+			res := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/tasks/%d", tc.id), nil)
+			req.Header.Add("Content-Type", "application/json")
+			suite.engine.ServeHTTP(res, req)
+
+			if !cmp.Equal(http.StatusOK, res.Code) {
+				tt.Error(cmp.Diff(http.StatusOK, res.Code))
+			}
+		})
+	}
+}
