@@ -2,6 +2,7 @@ package rest_test
 
 import (
 	"bytes"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -32,34 +33,66 @@ func NewTodoTestSuite(t *testing.T) *TodoTestSuite {
 }
 
 func Test_GetTasks(t *testing.T) {
-	suite := NewTodoTestSuite(t)
-
-	res := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/tasks", nil)
-	suite.engine.ServeHTTP(res, req)
-
-	if !cmp.Equal(http.StatusOK, res.Code) {
-		t.Error(cmp.Diff(http.StatusOK, res.Code))
+	tests := []struct {
+		expected string
+	}{
+		{expected: `{"result":[{"id":1,"name":"name","status":0}]}`},
 	}
 
-	if !cmp.Equal(`{"result":[{"id":1,"name":"name","status":0}]}`, res.Body.String()) {
-		t.Error(cmp.Diff(`{"result":[{"id":1,"name":"name","status":0}]}`, res.Body.String()))
+	for _, tc := range tests {
+		tc := tc
+
+		t.Run(fmt.Sprintf("test %s", tc.expected), func(tt *testing.T) {
+			tt.Parallel()
+
+			suite := NewTodoTestSuite(t)
+
+			res := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodGet, "/tasks", nil)
+			suite.engine.ServeHTTP(res, req)
+
+			if !cmp.Equal(http.StatusOK, res.Code) {
+				tt.Error(cmp.Diff(http.StatusOK, res.Code))
+			}
+
+			if !cmp.Equal(tc.expected, res.Body.String()) {
+				tt.Error(cmp.Diff(tc.expected, res.Body.String()))
+			}
+		})
 	}
 }
 
 func Test_CreateTask(t *testing.T) {
-	suite := NewTodoTestSuite(t)
-
-	res := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/tasks", bytes.NewBufferString(`{"name":"買晚餐"}`))
-	req.Header.Add("Content-Type", "application/json")
-	suite.engine.ServeHTTP(res, req)
-
-	if !cmp.Equal(http.StatusOK, res.Code) {
-		t.Error(cmp.Diff(http.StatusOK, res.Code))
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{
+			input:    `{"name":"買晚餐"}`,
+			expected: `{"result":{"id":1,"name":"買晚餐","status":0}}`,
+		},
 	}
 
-	if !cmp.Equal(`{"result":{"id":1,"name":"買晚餐","status":0}}`, res.Body.String()) {
-		t.Error(cmp.Diff(`{"result":{"id":1,"name":"買晚餐","status":0}}`, res.Body.String()))
+	for _, tc := range tests {
+		tc := tc
+
+		t.Run(fmt.Sprintf("test %s", tc.input), func(tt *testing.T) {
+			tt.Parallel()
+
+			suite := NewTodoTestSuite(t)
+
+			res := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodPost, "/tasks", bytes.NewBufferString(tc.input))
+			req.Header.Add("Content-Type", "application/json")
+			suite.engine.ServeHTTP(res, req)
+
+			if !cmp.Equal(http.StatusOK, res.Code) {
+				tt.Error(cmp.Diff(http.StatusOK, res.Code))
+			}
+
+			if !cmp.Equal(tc.expected, res.Body.String()) {
+				tt.Error(cmp.Diff(tc.expected, res.Body.String()))
+			}
+		})
 	}
 }
