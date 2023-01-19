@@ -1,6 +1,7 @@
 package rest_test
 
 import (
+	"bytes"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -50,7 +51,8 @@ func Test_CreateTask(t *testing.T) {
 	suite := NewTodoTestSuite(t)
 
 	res := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/tasks", nil)
+	req := httptest.NewRequest(http.MethodPost, "/tasks", bytes.NewBufferString(`{"name":"買晚餐"}`))
+	req.Header.Add("Content-Type", "application/json")
 	suite.engine.ServeHTTP(res, req)
 
 	if !cmp.Equal(http.StatusOK, res.Code) {

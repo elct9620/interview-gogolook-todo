@@ -8,6 +8,10 @@ type TaskOutput struct {
 	Status int    `json:"status"`
 }
 
+type CreateTaskInput struct {
+	Name string `json:"name"`
+}
+
 type TodoRepository interface {
 	AllTasks() []*domain.Task
 }
@@ -35,6 +39,6 @@ func (uc *TodoUseCase) ListTasks() (output []TaskOutput) {
 	return output
 }
 
-func (uc *TodoUseCase) CreateTask(name string) TaskOutput {
-	return TaskOutput{1, name, 0}
+func (uc *TodoUseCase) CreateTask(input *CreateTaskInput) *TaskOutput {
+	return &TaskOutput{1, input.Name, 0}
 }

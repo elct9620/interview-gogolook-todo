@@ -16,8 +16,11 @@ func ListTasks(usecase *TodoUseCase) gin.HandlerFunc {
 
 func CreateTask(usecase *TodoUseCase) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		var input CreateTaskInput
+		c.ShouldBind(&input)
+
 		c.JSON(http.StatusOK, gin.H{
-			"result": usecase.CreateTask("買晚餐"),
+			"result": usecase.CreateTask(&input),
 		})
 	}
 }
