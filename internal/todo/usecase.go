@@ -10,9 +10,9 @@ func NewTodoUseCase() *TodoUseCase {
 }
 
 func (uc *TodoUseCase) ListTasks() []map[string]any {
-	task := domain.NewTask(1, "name", domain.TaskIncomplete)
+	task := domain.NewTask(1, "name", false)
 
 	return []map[string]any{
-		{"id": task.ID, "name": task.Name, "status": task.Status},
+		{"id": task.ID, "name": task.Name, "status": task.StatusCode()},
 	}
 }
