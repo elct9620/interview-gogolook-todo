@@ -23,6 +23,7 @@ type TodoRepository interface {
 	CreateTask(name string) *domain.Task
 	FindTask(id int) *domain.Task
 	UpdateTask(task *domain.Task) *domain.Task
+	DeleteTask(id int)
 }
 
 type TodoUseCase struct {
@@ -76,4 +77,8 @@ func (uc *TodoUseCase) UpdateTask(id int, input *UpdateTaskInput) *TaskOutput {
 		Name:   updatedTask.Name,
 		Status: updatedTask.StatusCode(),
 	}
+}
+
+func (uc *TodoUseCase) DeleteTask(id int) {
+	uc.repo.DeleteTask(id)
 }

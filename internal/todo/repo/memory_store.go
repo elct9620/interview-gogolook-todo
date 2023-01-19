@@ -60,6 +60,13 @@ func (s *MemoryStore) UpdateTask(task *domain.Task) *domain.Task {
 	return newTaskFromSchema(s.items[task.ID])
 }
 
+func (s *MemoryStore) DeleteTask(id int) {
+	_, ok := s.items[id]
+	if ok {
+		delete(s.items, id)
+	}
+}
+
 func newTaskFromSchema(schema TaskSchema) *domain.Task {
 	return domain.NewTask(schema.ID, schema.Name, schema.Completed)
 }

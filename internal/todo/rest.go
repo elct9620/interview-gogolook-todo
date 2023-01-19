@@ -42,6 +42,10 @@ func UpdateTask(usecase *TodoUseCase) gin.HandlerFunc {
 
 func DeleteTask(usecase *TodoUseCase) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		idStr := c.Param("id")
+		id, _ := strconv.Atoi(idStr)
+
+		usecase.DeleteTask(id)
 		c.JSON(http.StatusOK, nil)
 	}
 }
