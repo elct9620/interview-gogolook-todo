@@ -30,3 +30,7 @@ func (uc *TodoUseCase) ListTasks() (output []TaskOutput) {
 
 	return output
 }
+
+func (uc *TodoUseCase) CreateTask(name string) TaskOutput {
+	return TaskOutput{"id": 1, "name": name, "status": 0}
+}

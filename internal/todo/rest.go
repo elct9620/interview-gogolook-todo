@@ -17,7 +17,7 @@ func ListTasks(usecase *TodoUseCase) gin.HandlerFunc {
 func CreateTask(usecase *TodoUseCase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"result": gin.H{"id": 1, "name": "買晚餐", "status": 0},
+			"result": usecase.CreateTask("買晚餐"),
 		})
 	}
 }
